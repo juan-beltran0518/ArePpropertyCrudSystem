@@ -493,6 +493,275 @@ class PropertyManager {
         }).format(amount);
     }
 
+    // Renderizar vista de grid
+    renderGridView(properties) {
+        document.getElementById('tableView').style.display = 'none';
+        document.getElementById('gridView').style.display = 'block';
+        
+        const gridContainer = document.getElementById('propertiesGrid');
+        gridContainer.innerHTML = '';
+        
+        properties.forEach(property => {
+            const card = this.createPropertyCard(property);
+            gridContainer.appendChild(card);
+        });
+    }
+
+    // Crear tarjeta de propiedad para vista de grid
+    createPropertyCard(property) {
+        const card = document.createElement('div');
+        card.className = 'property-card';
+        card.innerHTML = `
+            <div class="card-header">
+                <div class="property-address">
+                    <i class="fas fa-map-marker-alt"></i>
+                    ${property.address}
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="property-details">
+                    <div class="detail-item">
+                        <i class="fas fa-dollar-sign"></i>
+                        <span class="detail-label">Precio:</span>
+                        <span class="detail-value">${this.formatCurrency(property.price)}</span>
+                    </div>
+                    <div class="detail-item">
+                        <i class="fas fa-ruler-combined"></i>
+                        <span class="detail-label">Área:</span>
+                        <span class="detail-value">${property.size} m²</span>
+                    </div>
+                </div>
+                <div class="property-description">
+                    <p>${property.description || 'Sin descripción'}</p>
+                </div>
+            </div>
+            <div class="card-footer">
+                <div class="action-buttons">
+                    <button class="btn btn-sm btn-info" onclick="propertyManager.viewProperty(${property.id})" title="Ver detalles">
+                        <i class="fas fa-eye"></i> Ver
+                    </button>
+                    <button class="btn btn-sm btn-warning" onclick="propertyManager.editProperty(${property.id})" title="Editar">
+                        <i class="fas fa-edit"></i> Editar
+                    </button>
+                    <button class="btn btn-sm btn-danger" onclick="propertyManager.confirmDeleteProperty(${property.id})" title="Eliminar">
+                        <i class="fas fa-trash"></i> Eliminar
+                    </button>
+                </div>
+            </div>
+        `;
+        return card;
+    }
+
+    // Ver detalles de una propiedad
+    async viewProperty(id) {
+        try {
+            const response = await fetch(`/api/properties/${id}`);
+            if (response.ok) {
+                const property = await response.json();
+                this.showPropertyDetails(property);
+            } else {
+                this.showToast('Error al cargar los detalles de la propiedad', 'error');
+            }
+        } catch (error) {
+            console.error('Error viewing property:', error);
+            this.showToast('Error de conexión al cargar detalles', 'error');
+        }
+    }
+
+    // Mostrar detalles de propiedad en modal
+    showPropertyDetails(property) {
+        const modalBody = document.getElementById('detailsModalBody');
+        modalBody.innerHTML = `
+            <div class="property-details-modal">
+                <div class="detail-section">
+                    <h3><i class="fas fa-map-marker-alt"></i> Dirección</h3>
+                    <p>${property.address}</p>
+                </div>
+                <div class="detail-section">
+                    <h3><i class="fas fa-dollar-sign"></i> Precio</h3>
+                    <p class="price-display">${this.formatCurrency(property.price)}</p>
+                </div>
+                <div class="detail-section">
+                    <h3><i class="fas fa-ruler-combined"></i> Área</h3>
+                    <p>${property.size} m²</p>
+                </div>
+                <div class="detail-section">
+                    <h3><i class="fas fa-align-left"></i> Descripción</h3>
+                    <p>${property.description || 'Sin descripción proporcionada'}</p>
+                </div>
+                <div class="detail-section">
+                    <h3><i class="fas fa-info-circle"></i> Información adicional</h3>
+                    <div class="additional-info">
+                        <div class="info-item">
+                            <span class="info-label">ID:</span>
+                            <span class="info-value">${property.id}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Precio por m²:</span>
+                            <span class="info-value">${this.formatCurrency(property.price / property.size)}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        this.openModal('detailsModal');
+    }
+
+    // Editar propiedad
+    async editProperty(id) {
+        try {
+            const response = await fetch(`/api/properties/${id}`);
+            if (response.ok) {
+                const property = await response.json();
+                this.populateFormForEdit(property);
+            } else {
+                this.showToast('Error al cargar los datos de la propiedad', 'error');
+            }
+        } catch (error) {
+            console.error('Error loading property for edit:', error);
+            this.showToast('Error de conexión al cargar datos para editar', 'error');
+        }
+    }
+
+    // Poblar formulario para editar
+    populateFormForEdit(property) {
+        this.editingPropertyId = property.id;
+        
+        // Llenar campos del formulario
+        document.getElementById('address').value = property.address;
+        document.getElementById('price').value = property.price;
+        document.getElementById('size').value = property.size;
+        document.getElementById('description').value = property.description || '';
+        
+        // Cambiar título del formulario
+        document.getElementById('formTitle').innerHTML = `
+            <i class="fas fa-edit"></i>
+            Editar Propiedad
+        `;
+        
+        document.getElementById('submitBtn').innerHTML = `
+            <i class="fas fa-save"></i>
+            Actualizar Propiedad
+        `;
+        
+        // Mostrar formulario
+        document.getElementById('formSection').style.display = 'block';
+        document.getElementById('address').focus();
+    }
+
+    // Confirmar eliminación de propiedad
+    async confirmDeleteProperty(id) {
+        try {
+            const response = await fetch(`/api/properties/${id}`);
+            if (response.ok) {
+                const property = await response.json();
+                this.showDeleteConfirmation(property);
+            } else {
+                this.showToast('Error al cargar los datos de la propiedad', 'error');
+            }
+        } catch (error) {
+            console.error('Error loading property for delete:', error);
+            this.showToast('Error de conexión', 'error');
+        }
+    }
+
+    // Mostrar confirmación de eliminación
+    showDeleteConfirmation(property) {
+        const propertyPreview = document.getElementById('propertyPreview');
+        propertyPreview.innerHTML = `
+            <div class="property-preview-card">
+                <div class="preview-address">
+                    <i class="fas fa-map-marker-alt"></i>
+                    ${property.address}
+                </div>
+                <div class="preview-details">
+                    <span class="preview-price">${this.formatCurrency(property.price)}</span>
+                    <span class="preview-size">${property.size} m²</span>
+                </div>
+            </div>
+        `;
+        
+        // Configurar botón de confirmación
+        const confirmBtn = document.getElementById('confirmDeleteBtn');
+        confirmBtn.onclick = () => this.deleteProperty(property.id);
+        
+        this.openModal('confirmModal');
+    }
+
+    // Eliminar propiedad
+    async deleteProperty(id) {
+        try {
+            const response = await fetch(`/api/properties/${id}`, {
+                method: 'DELETE'
+            });
+
+            if (response.ok) {
+                this.showToast('Propiedad eliminada exitosamente', 'success');
+                this.closeModal('confirmModal');
+                this.loadProperties();
+            } else {
+                const errorData = await response.json();
+                this.showToast(`Error: ${errorData.message || 'No se pudo eliminar la propiedad'}`, 'error');
+            }
+        } catch (error) {
+            console.error('Error deleting property:', error);
+            this.showToast('Error de conexión al eliminar propiedad', 'error');
+        }
+    }
+
+    // Filtrar propiedades por búsqueda
+    filterProperties(searchTerm) {
+        const searchLower = searchTerm.toLowerCase().trim();
+        
+        if (!searchTerm) {
+            // Si no hay término de búsqueda, recargar todas las propiedades
+            this.loadProperties();
+            return;
+        }
+
+        // Obtener todas las filas de la tabla o tarjetas del grid
+        if (this.currentView === 'table') {
+            const rows = document.querySelectorAll('#propertiesTableBody tr');
+            rows.forEach(row => {
+                const address = row.querySelector('.property-address').textContent.toLowerCase();
+                const description = row.querySelector('.property-description').textContent.toLowerCase();
+                
+                if (address.includes(searchLower) || description.includes(searchLower)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        } else {
+            const cards = document.querySelectorAll('.property-card');
+            cards.forEach(card => {
+                const address = card.querySelector('.property-address').textContent.toLowerCase();
+                const description = card.querySelector('.property-description p').textContent.toLowerCase();
+                
+                if (address.includes(searchLower) || description.includes(searchLower)) {
+                    card.style.display = '';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+    }
+
+    // Abrir modal
+    openModal(modalId) {
+        const modal = document.getElementById(modalId);
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+
+    // Cerrar modal
+    closeModal(modalId) {
+        const modal = document.getElementById(modalId);
+        modal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+    }
+
     // Mostrar/ocultar formulario
     hideForm() {
         document.getElementById('formSection').style.display = 'none';
@@ -545,6 +814,12 @@ function setView(view) {
         
         // Recargar propiedades en la nueva vista
         window.propertyManager.loadProperties();
+    }
+}
+
+function closeModal(modalId) {
+    if (window.propertyManager) {
+        window.propertyManager.closeModal(modalId);
     }
 }
 
