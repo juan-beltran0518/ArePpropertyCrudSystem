@@ -1,13 +1,247 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Property Management System</title>
+    <title>Sistema de Gestión de Propiedades</title>
     <link rel="stylesheet" href="/css/styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
-    
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <i class="fas fa-home"></i>
+                <span class="brand-text">Sistema de Propiedades</span>
+            </div>
+            <div class="nav-menu" id="navMenu">
+                <button class="btn btn-primary" onclick="showAddPropertyForm()">
+                    <i class="fas fa-plus"></i>
+                    Nueva Propiedad
+                </button>
+            </div>
+            <div class="nav-toggle" id="navToggle">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Header Section -->
+            <section class="header-section">
+                <h1 class="page-title">
+                    <i class="fas fa-building"></i>
+                    Gestión de Propiedades
+                </h1>
+                <p class="page-subtitle">Administra tu portafolio de propiedades inmobiliarias</p>
+            </section>
+
+            <!-- Property Form Section -->
+            <section class="form-section" id="formSection">
+                <div class="form-container">
+                    <div class="form-header">
+                        <h2 id="formTitle">
+                            <i class="fas fa-plus-circle"></i>
+                            Agregar Nueva Propiedad
+                        </h2>
+                        <button class="btn-close" onclick="hideForm()">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <form id="propertyForm" class="property-form">
+                        <div class="form-group">
+                            <label for="address">
+                                <i class="fas fa-map-marker-alt"></i>
+                                Dirección *
+                            </label>
+                            <input type="text" id="address" name="address" required 
+                                   placeholder="Ej: Calle 123 #45-67, Bogotá">
+                            <span class="error-message" id="addressError"></span>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="price">
+                                    <i class="fas fa-dollar-sign"></i>
+                                    Precio *
+                                </label>
+                                <input type="number" id="price" name="price" required min="0" step="0.01"
+                                       placeholder="Ej: 250000000">
+                                <span class="error-message" id="priceError"></span>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="size">
+                                    <i class="fas fa-ruler-combined"></i>
+                                    Área (m²) *
+                                </label>
+                                <input type="number" id="size" name="size" required min="1" step="0.01"
+                                       placeholder="Ej: 120.5">
+                                <span class="error-message" id="sizeError"></span>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="description">
+                                <i class="fas fa-align-left"></i>
+                                Descripción
+                            </label>
+                            <textarea id="description" name="description" rows="4" 
+                                      placeholder="Describe las características principales de la propiedad..."></textarea>
+                            <span class="error-message" id="descriptionError"></span>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-secondary" onclick="hideForm()">
+                                <i class="fas fa-times"></i>
+                                Cancelar
+                            </button>
+                            <button type="submit" class="btn btn-primary" id="submitBtn">
+                                <i class="fas fa-save"></i>
+                                Guardar Propiedad
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Properties Listing Section -->
+            <section class="listing-section">
+                <div class="listing-header">
+                    <h2>
+                        <i class="fas fa-list"></i>
+                        Lista de Propiedades
+                    </h2>
+                    <div class="listing-controls">
+                        <div class="search-container">
+                            <input type="text" id="searchInput" placeholder="Buscar propiedades...">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <div class="view-toggle">
+                            <button class="btn btn-sm" id="gridViewBtn" onclick="setView('grid')">
+                                <i class="fas fa-th"></i>
+                            </button>
+                            <button class="btn btn-sm active" id="tableViewBtn" onclick="setView('table')">
+                                <i class="fas fa-list"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Loading State -->
+                <div class="loading-state" id="loadingState">
+                    <div class="spinner"></div>
+                    <p>Cargando propiedades...</p>
+                </div>
+
+                <!-- Empty State -->
+                <div class="empty-state" id="emptyState">
+                    <div class="empty-icon">
+                        <i class="fas fa-home"></i>
+                    </div>
+                    <h3>No hay propiedades registradas</h3>
+                    <p>Agrega tu primera propiedad para comenzar</p>
+                    <button class="btn btn-primary" onclick="showAddPropertyForm()">
+                        <i class="fas fa-plus"></i>
+                        Agregar Propiedad
+                    </button>
+                </div>
+
+                <!-- Table View -->
+                <div class="table-container" id="tableView">
+                    <table class="properties-table">
+                        <thead>
+                            <tr>
+                                <th>Dirección</th>
+                                <th>Precio</th>
+                                <th>Área (m²)</th>
+                                <th>Descripción</th>
+                                <th class="actions-column">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="propertiesTableBody">
+                            <!-- Las filas se cargarán dinámicamente -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Grid View -->
+                <div class="grid-container" id="gridView" style="display: none;">
+                    <div class="properties-grid" id="propertiesGrid">
+                        <!-- Las tarjetas se cargarán dinámicamente -->
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Modal for Property Details -->
+    <div class="modal" id="detailsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>
+                    <i class="fas fa-info-circle"></i>
+                    Detalles de la Propiedad
+                </h2>
+                <button class="btn-close" onclick="closeModal('detailsModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="detailsModalBody">
+                <!-- Los detalles se cargarán dinámicamente -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('detailsModal')">
+                    Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Delete Confirmation -->
+    <div class="modal" id="confirmModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>
+                    <i class="fas fa-exclamation-triangle"></i>
+                    Confirmar Eliminación
+                </h2>
+                <button class="btn-close" onclick="closeModal('confirmModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>¿Estás seguro de que deseas eliminar esta propiedad?</p>
+                <div class="property-preview" id="propertyPreview">
+                    <!-- Vista previa de la propiedad se cargará aquí -->
+                </div>
+                <div class="warning-message">
+                    <i class="fas fa-warning"></i>
+                    Esta acción no se puede deshacer.
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('confirmModal')">
+                    Cancelar
+                </button>
+                <button class="btn btn-danger" id="confirmDeleteBtn">
+                    <i class="fas fa-trash"></i>
+                    Eliminar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div class="toast-container" id="toastContainer">
+        <!-- Las notificaciones se mostrarán aquí -->
+    </div>
+
     <script src="/js/properties.js"></script>
 </body>
 </html>
