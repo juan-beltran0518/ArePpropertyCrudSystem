@@ -177,6 +177,10 @@ public class PropertyService {
         dto.setPrice(property.getPrice());
         dto.setSize(property.getSize());
         dto.setDescription(property.getDescription());
+        dto.setOwnerName(property.getOwnerName());
+        dto.setOwnerPhone(property.getOwnerPhone());
+        dto.setOwnerEmail(property.getOwnerEmail());
+        dto.setOwnerDocument(property.getOwnerDocument());
         dto.setCreatedAt(property.getCreatedAt());
         dto.setUpdatedAt(property.getUpdatedAt());
         return dto;
@@ -194,6 +198,10 @@ public class PropertyService {
         property.setPrice(propertyDTO.getPrice());
         property.setSize(propertyDTO.getSize());
         property.setDescription(propertyDTO.getDescription());
+        property.setOwnerName(propertyDTO.getOwnerName());
+        property.setOwnerPhone(propertyDTO.getOwnerPhone());
+        property.setOwnerEmail(propertyDTO.getOwnerEmail());
+        property.setOwnerDocument(propertyDTO.getOwnerDocument());
         return property;
     }
 }

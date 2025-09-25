@@ -96,6 +96,58 @@
                             <span class="error-message" id="descriptionError"></span>
                         </div>
                         
+                        <!-- Owner Information Section -->
+                        <div class="form-section-header">
+                            <h3>
+                                <i class="fas fa-user"></i>
+                                Información del Propietario
+                            </h3>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="ownerName">
+                                    <i class="fas fa-user"></i>
+                                    Nombre Completo *
+                                </label>
+                                <input type="text" id="ownerName" name="ownerName" required 
+                                       placeholder="Ej: Juan Pérez García">
+                                <span class="error-message" id="ownerNameError"></span>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="ownerDocument">
+                                    <i class="fas fa-id-card"></i>
+                                    Documento
+                                </label>
+                                <input type="text" id="ownerDocument" name="ownerDocument"
+                                       placeholder="Ej: 12345678 o CC.12.345.678">
+                                <span class="error-message" id="ownerDocumentError"></span>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="ownerPhone">
+                                    <i class="fas fa-phone"></i>
+                                    Teléfono
+                                </label>
+                                <input type="tel" id="ownerPhone" name="ownerPhone"
+                                       placeholder="Ej: +57 300 123 4567">
+                                <span class="error-message" id="ownerPhoneError"></span>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="ownerEmail">
+                                    <i class="fas fa-envelope"></i>
+                                    Email
+                                </label>
+                                <input type="email" id="ownerEmail" name="ownerEmail"
+                                       placeholder="Ej: juan.perez@email.com">
+                                <span class="error-message" id="ownerEmailError"></span>
+                            </div>
+                        </div>
+                        
                         <div class="form-actions">
                             <button type="button" class="btn btn-secondary" onclick="hideForm()">
                                 <i class="fas fa-times"></i>
@@ -160,6 +212,8 @@
                                 <th>Dirección</th>
                                 <th>Precio</th>
                                 <th>Área (m²)</th>
+                                <th>Propietario</th>
+                                <th>Contacto</th>
                                 <th>Descripción</th>
                                 <th class="actions-column">Acciones</th>
                             </tr>

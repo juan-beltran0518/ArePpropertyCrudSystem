@@ -20,6 +20,31 @@ class PropertyValidator {
                 min: 1,
                 pattern: /^\d+(\.\d{1,2})?$/,
                 message: 'El área es obligatoria y debe ser un número positivo en m²'
+            },
+            ownerName: {
+                required: true,
+                minLength: 2,
+                maxLength: 200,
+                pattern: /^[A-Za-zÀ-ÿñÑ\s]+$/,
+                message: 'El nombre del propietario es obligatorio y debe contener solo letras (2-200 caracteres)'
+            },
+            ownerPhone: {
+                required: false,
+                maxLength: 20,
+                pattern: /^[+]?[0-9\s\-()]+$/,
+                message: 'El teléfono debe contener solo números, espacios, guiones, paréntesis y el signo +'
+            },
+            ownerEmail: {
+                required: false,
+                maxLength: 100,
+                pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                message: 'El email debe tener un formato válido'
+            },
+            ownerDocument: {
+                required: false,
+                maxLength: 50,
+                pattern: /^[A-Za-z0-9\-.\s]*$/,
+                message: 'El documento debe contener solo letras, números, guiones, puntos y espacios'
             }
         };
         this.initValidation();
@@ -27,7 +52,7 @@ class PropertyValidator {
 
     // Inicializar validaciones en tiempo real
     initValidation() {
-        const fields = ['address', 'price', 'size'];
+        const fields = ['address', 'price', 'size', 'ownerName', 'ownerPhone', 'ownerEmail', 'ownerDocument'];
         fields.forEach(fieldName => {
             const field = document.getElementById(fieldName);
             if (field) {
@@ -90,6 +115,14 @@ class PropertyValidator {
                 return this.validatePrice(value);
             case 'size':
                 return this.validateSize(value);
+            case 'ownerName':
+                return this.validateOwnerName(value);
+            case 'ownerPhone':
+                return this.validateOwnerPhone(value);
+            case 'ownerEmail':
+                return this.validateOwnerEmail(value);
+            case 'ownerDocument':
+                return this.validateOwnerDocument(value);
             default:
                 return true;
         }
@@ -178,6 +211,94 @@ class PropertyValidator {
         return true;
     }
 
+    // Validar nombre del propietario
+    validateOwnerName(name) {
+        const rules = this.validationRules.ownerName;
+        
+        // Verificar longitud mínima
+        if (name.length < rules.minLength) {
+            this.showError('ownerName', `El nombre debe tener al menos ${rules.minLength} caracteres`);
+            return false;
+        }
+
+        // Verificar longitud máxima
+        if (name.length > rules.maxLength) {
+            this.showError('ownerName', `El nombre no puede exceder ${rules.maxLength} caracteres`);
+            return false;
+        }
+
+        // Verificar patrón (solo letras y espacios, incluye acentos)
+        if (!rules.pattern.test(name)) {
+            this.showError('ownerName', 'El nombre debe contener solo letras y espacios');
+            return false;
+        }
+
+        return true;
+    }
+
+    // Validar teléfono del propietario
+    validateOwnerPhone(phone) {
+        if (!phone) return true; // Campo opcional
+        
+        const rules = this.validationRules.ownerPhone;
+
+        // Verificar longitud máxima
+        if (phone.length > rules.maxLength) {
+            this.showError('ownerPhone', `El teléfono no puede exceder ${rules.maxLength} caracteres`);
+            return false;
+        }
+
+        // Verificar patrón
+        if (!rules.pattern.test(phone)) {
+            this.showError('ownerPhone', rules.message);
+            return false;
+        }
+
+        return true;
+    }
+
+    // Validar email del propietario
+    validateOwnerEmail(email) {
+        if (!email) return true; // Campo opcional
+        
+        const rules = this.validationRules.ownerEmail;
+
+        // Verificar longitud máxima
+        if (email.length > rules.maxLength) {
+            this.showError('ownerEmail', `El email no puede exceder ${rules.maxLength} caracteres`);
+            return false;
+        }
+
+        // Verificar patrón de email
+        if (!rules.pattern.test(email)) {
+            this.showError('ownerEmail', rules.message);
+            return false;
+        }
+
+        return true;
+    }
+
+    // Validar documento del propietario
+    validateOwnerDocument(document) {
+        if (!document) return true; // Campo opcional
+        
+        const rules = this.validationRules.ownerDocument;
+
+        // Verificar longitud máxima
+        if (document.length > rules.maxLength) {
+            this.showError('ownerDocument', `El documento no puede exceder ${rules.maxLength} caracteres`);
+            return false;
+        }
+
+        // Verificar patrón
+        if (!rules.pattern.test(document)) {
+            this.showError('ownerDocument', rules.message);
+            return false;
+        }
+
+        return true;
+    }
+
     // Mostrar mensaje de error
     showError(fieldName, message) {
         const errorElement = document.getElementById(`${fieldName}Error`);
@@ -213,7 +334,11 @@ class PropertyValidator {
         const labels = {
             address: 'La dirección',
             price: 'El precio',
-            size: 'El área'
+            size: 'El área',
+            ownerName: 'El nombre del propietario',
+            ownerPhone: 'El teléfono',
+            ownerEmail: 'El email',
+            ownerDocument: 'El documento'
         };
         return labels[fieldName] || 'El campo';
     }
@@ -221,7 +346,7 @@ class PropertyValidator {
     // Validar todo el formulario
     validateForm() {
         let isValid = true;
-        const fields = ['address', 'price', 'size'];
+        const fields = ['address', 'price', 'size', 'ownerName', 'ownerPhone', 'ownerEmail', 'ownerDocument'];
         
         fields.forEach(fieldName => {
             if (!this.validateField(fieldName)) {
@@ -241,7 +366,11 @@ class PropertyValidator {
             address: document.getElementById('address').value.trim(),
             price: parseFloat(price),
             size: parseFloat(size),
-            description: document.getElementById('description').value.trim()
+            description: document.getElementById('description').value.trim(),
+            ownerName: document.getElementById('ownerName').value.trim(),
+            ownerPhone: document.getElementById('ownerPhone').value.trim(),
+            ownerEmail: document.getElementById('ownerEmail').value.trim(),
+            ownerDocument: document.getElementById('ownerDocument').value.trim()
         };
     }
 }
@@ -462,6 +591,31 @@ class PropertyManager {
                 </div>
             </td>
             <td>
+                <div class="owner-info">
+                    <div class="owner-name">
+                        <i class="fas fa-user"></i>
+                        ${property.ownerName || 'No especificado'}
+                    </div>
+                </div>
+            </td>
+            <td>
+                <div class="contact-info">
+                    ${property.ownerPhone ? `
+                        <div class="owner-phone">
+                            <i class="fas fa-phone"></i>
+                            ${property.ownerPhone}
+                        </div>
+                    ` : ''}
+                    ${property.ownerEmail ? `
+                        <div class="owner-email">
+                            <i class="fas fa-envelope"></i>
+                            ${property.ownerEmail}
+                        </div>
+                    ` : ''}
+                    ${!property.ownerPhone && !property.ownerEmail ? 'No especificado' : ''}
+                </div>
+            </td>
+            <td>
                 <div class="property-description">
                     ${property.description || 'Sin descripción'}
                 </div>
@@ -530,10 +684,24 @@ class PropertyManager {
                         <span class="detail-label">Área:</span>
                         <span class="detail-value">${property.size} m²</span>
                     </div>
+                    ${property.ownerName ? `
+                    <div class="detail-item">
+                        <i class="fas fa-user"></i>
+                        <span class="detail-label">Propietario:</span>
+                        <span class="detail-value">${property.ownerName}</span>
+                    </div>
+                    ` : ''}
                 </div>
                 <div class="property-description">
                     <p>${property.description || 'Sin descripción'}</p>
                 </div>
+                ${(property.ownerPhone || property.ownerEmail) ? `
+                <div class="owner-contact">
+                    <h4><i class="fas fa-address-book"></i> Contacto</h4>
+                    ${property.ownerPhone ? `<p><i class="fas fa-phone"></i> ${property.ownerPhone}</p>` : ''}
+                    ${property.ownerEmail ? `<p><i class="fas fa-envelope"></i> ${property.ownerEmail}</p>` : ''}
+                </div>
+                ` : ''}
             </div>
             <div class="card-footer">
                 <div class="action-buttons">
@@ -585,6 +753,35 @@ class PropertyManager {
                     <h3><i class="fas fa-ruler-combined"></i> Área</h3>
                     <p>${property.size} m²</p>
                 </div>
+                ${property.ownerName ? `
+                <div class="detail-section">
+                    <h3><i class="fas fa-user"></i> Información del Propietario</h3>
+                    <div class="owner-details">
+                        <div class="owner-item">
+                            <span class="owner-label">Nombre:</span>
+                            <span class="owner-value">${property.ownerName}</span>
+                        </div>
+                        ${property.ownerDocument ? `
+                        <div class="owner-item">
+                            <span class="owner-label">Documento:</span>
+                            <span class="owner-value">${property.ownerDocument}</span>
+                        </div>
+                        ` : ''}
+                        ${property.ownerPhone ? `
+                        <div class="owner-item">
+                            <span class="owner-label">Teléfono:</span>
+                            <span class="owner-value">${property.ownerPhone}</span>
+                        </div>
+                        ` : ''}
+                        ${property.ownerEmail ? `
+                        <div class="owner-item">
+                            <span class="owner-label">Email:</span>
+                            <span class="owner-value">${property.ownerEmail}</span>
+                        </div>
+                        ` : ''}
+                    </div>
+                </div>
+                ` : ''}
                 <div class="detail-section">
                     <h3><i class="fas fa-align-left"></i> Descripción</h3>
                     <p>${property.description || 'Sin descripción proporcionada'}</p>
@@ -633,6 +830,12 @@ class PropertyManager {
         document.getElementById('price').value = property.price;
         document.getElementById('size').value = property.size;
         document.getElementById('description').value = property.description || '';
+        
+        // Llenar campos del propietario
+        document.getElementById('ownerName').value = property.ownerName || '';
+        document.getElementById('ownerPhone').value = property.ownerPhone || '';
+        document.getElementById('ownerEmail').value = property.ownerEmail || '';
+        document.getElementById('ownerDocument').value = property.ownerDocument || '';
         
         // Cambiar título del formulario
         document.getElementById('formTitle').innerHTML = `

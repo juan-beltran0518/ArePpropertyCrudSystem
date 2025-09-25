@@ -1519,6 +1519,127 @@ input[type="number"] {
     color: var(--warning-color);
 }
 
+/* Estilos para información del propietario */
+.form-section-header {
+    margin: 2rem 0 1.5rem 0;
+    padding-top: 2rem;
+    border-top: 2px solid var(--border-light);
+}
+
+.form-section-header h3 {
+    color: var(--text-primary);
+    font-size: 1.2rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.form-section-header h3 i {
+    color: var(--primary-color);
+}
+
+/* Estilos para la tabla con información del propietario */
+.owner-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.owner-name {
+    font-weight: 600;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.owner-name i {
+    color: var(--primary-color);
+    font-size: 0.875rem;
+}
+
+.contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    font-size: 0.875rem;
+}
+
+.owner-phone, .owner-email {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    color: var(--text-secondary);
+}
+
+.owner-phone i, .owner-email i {
+    color: var(--info-color);
+    font-size: 0.75rem;
+    width: 12px;
+}
+
+/* Estilos para las tarjetas de propiedades con información del propietario */
+.owner-contact {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-light);
+}
+
+.owner-contact h4 {
+    font-size: 0.875rem;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.owner-contact h4 i {
+    color: var(--primary-color);
+}
+
+.owner-contact p {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin: 0.25rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.owner-contact p i {
+    color: var(--info-color);
+    width: 14px;
+}
+
+/* Estilos para el modal de detalles con información del propietario */
+.owner-details {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.owner-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem;
+    background: var(--bg-secondary);
+    border-radius: var(--border-radius);
+}
+
+.owner-label {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.owner-value {
+    color: var(--text-secondary);
+    text-align: right;
+}
+
 /* Mejoras responsivas para modales */
 @media (max-width: 768px) {
     .modal {
@@ -1551,5 +1672,24 @@ input[type="number"] {
     
     .card-footer .action-buttons {
         flex-wrap: wrap;
+    }
+    
+    /* Hacer la tabla responsiva para campos del propietario */
+    .properties-table {
+        font-size: 0.875rem;
+    }
+    
+    .contact-info {
+        font-size: 0.75rem;
+    }
+    
+    .owner-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.25rem;
+    }
+    
+    .owner-value {
+        text-align: left;
     }
 }

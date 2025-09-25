@@ -36,6 +36,27 @@ public class Property {
     @Size(max = 1000, message = "La descripción no puede exceder 1000 caracteres")
     private String description;
     
+    // Campos del propietario
+    @Column(name = "owner_name", nullable = false, length = 200)
+    @NotBlank(message = "El nombre del propietario es obligatorio")
+    @Size(min = 2, max = 200, message = "El nombre del propietario debe tener entre 2 y 200 caracteres")
+    private String ownerName;
+    
+    @Column(name = "owner_phone", length = 20)
+    @Pattern(regexp = "^[+]?[0-9\\s\\-()]+$", message = "El teléfono debe contener solo números, espacios, guiones, paréntesis y el signo +")
+    @Size(max = 20, message = "El teléfono no puede exceder 20 caracteres")
+    private String ownerPhone;
+    
+    @Column(name = "owner_email", length = 100)
+    @Email(message = "El email del propietario debe tener un formato válido")
+    @Size(max = 100, message = "El email no puede exceder 100 caracteres")
+    private String ownerEmail;
+    
+    @Column(name = "owner_document", length = 50)
+    @Size(max = 50, message = "El documento de identidad no puede exceder 50 caracteres")
+    @Pattern(regexp = "^[A-Za-z0-9\\-\\.\\s]*$", message = "El documento debe contener solo letras, números, guiones, puntos y espacios")
+    private String ownerDocument;
+    
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
     
@@ -46,12 +67,25 @@ public class Property {
     public Property() {
     }
     
-    // Constructor con parámetros
+    // Constructor con parámetros básicos
     public Property(String address, Double price, Double size, String description) {
         this.address = address;
         this.price = price;
         this.size = size;
         this.description = description;
+    }
+    
+    // Constructor con parámetros incluyendo propietario
+    public Property(String address, Double price, Double size, String description, 
+                   String ownerName, String ownerPhone, String ownerEmail, String ownerDocument) {
+        this.address = address;
+        this.price = price;
+        this.size = size;
+        this.description = description;
+        this.ownerName = ownerName;
+        this.ownerPhone = ownerPhone;
+        this.ownerEmail = ownerEmail;
+        this.ownerDocument = ownerDocument;
     }
     
     // Métodos lifecycle de JPA
@@ -105,6 +139,38 @@ public class Property {
     
     public void setDescription(String description) {
         this.description = description;
+    }
+    
+    public String getOwnerName() {
+        return ownerName;
+    }
+    
+    public void setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
+    }
+    
+    public String getOwnerPhone() {
+        return ownerPhone;
+    }
+    
+    public void setOwnerPhone(String ownerPhone) {
+        this.ownerPhone = ownerPhone;
+    }
+    
+    public String getOwnerEmail() {
+        return ownerEmail;
+    }
+    
+    public void setOwnerEmail(String ownerEmail) {
+        this.ownerEmail = ownerEmail;
+    }
+    
+    public String getOwnerDocument() {
+        return ownerDocument;
+    }
+    
+    public void setOwnerDocument(String ownerDocument) {
+        this.ownerDocument = ownerDocument;
     }
     
     public LocalDateTime getCreatedAt() {
