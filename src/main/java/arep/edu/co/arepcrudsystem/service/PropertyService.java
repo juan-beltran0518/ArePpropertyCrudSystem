@@ -74,6 +74,7 @@ public class PropertyService {
             existingProperty.setPrice(propertyDTO.getPrice());
             existingProperty.setSize(propertyDTO.getSize());
             existingProperty.setDescription(propertyDTO.getDescription());
+            existingProperty.setOwnerName(propertyDTO.getOwnerName());
             
             Property updatedProperty = propertyRepository.save(existingProperty);
             return convertToDTO(updatedProperty);
@@ -94,76 +95,7 @@ public class PropertyService {
         return false;
     }
     
-    /**
-     * Search properties by address
-     * @param address Address to search for
-     * @return List of PropertyDTO matching the address
-     */
-    @Transactional(readOnly = true)
-    public List<PropertyDTO> searchPropertiesByAddress(String address) {
-        List<Property> properties = propertyRepository.findByAddressContainingIgnoreCase(address);
-        return properties.stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
-    }
-    
-    /**
-     * Find properties within a price range
-     * @param minPrice Minimum price
-     * @param maxPrice Maximum price
-     * @return List of PropertyDTO within the price range
-     */
-    @Transactional(readOnly = true)
-    public List<PropertyDTO> findPropertiesByPriceRange(Double minPrice, Double maxPrice) {
-        List<Property> properties = propertyRepository.findByPriceBetween(minPrice, maxPrice);
-        return properties.stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
-    }
-    
-    /**
-     * Find properties within a size range
-     * @param minSize Minimum size
-     * @param maxSize Maximum size
-     * @return List of PropertyDTO within the size range
-     */
-    @Transactional(readOnly = true)
-    public List<PropertyDTO> findPropertiesBySizeRange(Double minSize, Double maxSize) {
-        List<Property> properties = propertyRepository.findBySizeBetween(minSize, maxSize);
-        return properties.stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
-    }
-    
-    /**
-     * Get properties ordered by price
-     * @param ascending true for ascending order, false for descending
-     * @return List of PropertyDTO ordered by price
-     */
-    @Transactional(readOnly = true)
-    public List<PropertyDTO> getPropertiesOrderedByPrice(boolean ascending) {
-        List<Property> properties = ascending ? 
-                propertyRepository.findAllByOrderByPriceAsc() : 
-                propertyRepository.findAllByOrderByPriceDesc();
-        return properties.stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
-    }
-    
-    /**
-     * Get properties ordered by size
-     * @param ascending true for ascending order, false for descending
-     * @return List of PropertyDTO ordered by size
-     */
-    @Transactional(readOnly = true)
-    public List<PropertyDTO> getPropertiesOrderedBySize(boolean ascending) {
-        List<Property> properties = ascending ? 
-                propertyRepository.findAllByOrderBySizeAsc() : 
-                propertyRepository.findAllByOrderBySizeDesc();
-        return properties.stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
-    }
+
     
     /**
      * Convert Property entity to PropertyDTO
@@ -178,11 +110,6 @@ public class PropertyService {
         dto.setSize(property.getSize());
         dto.setDescription(property.getDescription());
         dto.setOwnerName(property.getOwnerName());
-        dto.setOwnerPhone(property.getOwnerPhone());
-        dto.setOwnerEmail(property.getOwnerEmail());
-        dto.setOwnerDocument(property.getOwnerDocument());
-        dto.setCreatedAt(property.getCreatedAt());
-        dto.setUpdatedAt(property.getUpdatedAt());
         return dto;
     }
     
@@ -199,9 +126,6 @@ public class PropertyService {
         property.setSize(propertyDTO.getSize());
         property.setDescription(propertyDTO.getDescription());
         property.setOwnerName(propertyDTO.getOwnerName());
-        property.setOwnerPhone(propertyDTO.getOwnerPhone());
-        property.setOwnerEmail(propertyDTO.getOwnerEmail());
-        property.setOwnerDocument(propertyDTO.getOwnerDocument());
         return property;
     }
 }
