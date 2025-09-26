@@ -22,20 +22,22 @@ body {
 header {
     background: #2c3e50;
     color: white;
-    padding: 1rem 0;
+    padding: 2rem 0;
     text-align: center;
     margin-bottom: 2rem;
 }
 
 header h1 {
     margin-bottom: 1rem;
+    font-size: 2.5em;
+    font-weight: normal;
 }
 
 #showFormBtn {
     background: #3498db;
     color: white;
     border: none;
-    padding: 10px 20px;
+    padding: 12px 25px;
     border-radius: 5px;
     cursor: pointer;
     font-size: 14px;
@@ -51,12 +53,14 @@ header h1 {
     padding: 2rem;
     border-radius: 8px;
     margin-bottom: 2rem;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    border: 1px solid #ddd;
 }
 
 .form-section h2 {
     margin-bottom: 1.5rem;
     color: #2c3e50;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 10px;
 }
 
 .form-group {
@@ -94,7 +98,7 @@ header h1 {
     padding: 10px 20px;
     margin-left: 10px;
     border: none;
-    border-radius: 5px;
+    border-radius: 4px;
     cursor: pointer;
     font-size: 14px;
 }
@@ -122,12 +126,14 @@ header h1 {
     background: white;
     padding: 2rem;
     border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    border: 1px solid #ddd;
 }
 
 .properties-section h2 {
     margin-bottom: 1.5rem;
     color: #2c3e50;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 10px;
 }
 
 /* Table */
