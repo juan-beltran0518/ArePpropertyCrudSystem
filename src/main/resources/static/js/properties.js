@@ -1,6 +1,11 @@
 // Estado global de la aplicación
 let properties = [];
+let filteredProperties = [];
 let editingId = null;
+
+// Variables para paginación
+let currentPage = 1;
+let propertiesPerPage = 5;
 
 // Inicialización cuando se carga la página
 document.addEventListener('DOMContentLoaded', function() {
@@ -47,7 +52,10 @@ async function loadProperties() {
         
         if (response.ok) {
             properties = await response.json();
+            filteredProperties = [...properties];
+            currentPage = 1;
             renderProperties();
+            showNotification('Propiedades cargadas exitosamente', 'success');
         } else {
             showNotification('Error al cargar las propiedades', 'error');
         }
@@ -59,24 +67,35 @@ async function loadProperties() {
     }
 }
 
-// Renderizar la tabla de propiedades
+// Renderizar la tabla de propiedades con paginación
 function renderProperties() {
     const tableBody = document.getElementById('propertiesTableBody');
     const table = document.getElementById('propertiesTable');
     const emptyState = document.getElementById('emptyState');
+    const paginationContainer = document.getElementById('paginationContainer');
     
-    if (properties.length === 0) {
+    if (filteredProperties.length === 0) {
         table.classList.add('hidden');
+        paginationContainer.classList.add('hidden');
         emptyState.classList.remove('hidden');
+        emptyState.textContent = properties.length === 0 ? 'No hay propiedades registradas' : 'No se encontraron propiedades con los filtros aplicados';
         return;
     }
     
     table.classList.remove('hidden');
+    paginationContainer.classList.remove('hidden');
     emptyState.classList.add('hidden');
     
+    // Calcular propiedades para la página actual
+    const startIndex = (currentPage - 1) * propertiesPerPage;
+    const endIndex = startIndex + propertiesPerPage;
+    const currentProperties = filteredProperties.slice(startIndex, endIndex);
+    
+    // Limpiar tabla
     tableBody.innerHTML = '';
     
-    properties.forEach(property => {
+    // Añadir filas de la página actual
+    currentProperties.forEach(property => {
         const row = document.createElement('tr');
         row.innerHTML = `
             <td>${property.address}</td>
@@ -94,6 +113,9 @@ function renderProperties() {
         `;
         tableBody.appendChild(row);
     });
+    
+    // Actualizar paginación
+    updatePagination();
 }
 
 // Formatear números con separadores de miles
@@ -228,4 +250,94 @@ function showNotification(message, type = 'success') {
     setTimeout(() => {
         notification.classList.add('hidden');
     }, 3000);
+}
+
+// ===== NUEVAS FUNCIONALIDADES =====
+
+// Filtrar propiedades
+function filterProperties() {
+    const searchAddress = document.getElementById('searchAddress').value.toLowerCase();
+    const minPrice = parseFloat(document.getElementById('minPrice').value) || 0;
+    const maxPrice = parseFloat(document.getElementById('maxPrice').value) || Infinity;
+    const minSize = parseFloat(document.getElementById('minSize').value) || 0;
+    
+    filteredProperties = properties.filter(property => {
+        const addressMatch = property.address.toLowerCase().includes(searchAddress);
+        const priceMatch = property.price >= minPrice && property.price <= maxPrice;
+        const sizeMatch = property.size >= minSize;
+        
+        return addressMatch && priceMatch && sizeMatch;
+    });
+    
+    currentPage = 1; // Resetear a primera página
+    renderProperties();
+}
+
+// Limpiar filtros
+function clearFilters() {
+    document.getElementById('searchAddress').value = '';
+    document.getElementById('minPrice').value = '';
+    document.getElementById('maxPrice').value = '';
+    document.getElementById('minSize').value = '';
+    
+    filteredProperties = [...properties];
+    currentPage = 1;
+    renderProperties();
+}
+
+// Actualizar controles de paginación
+function updatePagination() {
+    const totalPages = Math.ceil(filteredProperties.length / propertiesPerPage);
+    const paginationInfo = document.getElementById('paginationInfo');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const pageNumbers = document.getElementById('pageNumbers');
+    
+    // Información de la paginación
+    const startItem = (currentPage - 1) * propertiesPerPage + 1;
+    const endItem = Math.min(currentPage * propertiesPerPage, filteredProperties.length);
+    paginationInfo.textContent = `Mostrando ${startItem}-${endItem} de ${filteredProperties.length} propiedades`;
+    
+    // Botones anterior/siguiente
+    prevBtn.disabled = currentPage === 1;
+    nextBtn.disabled = currentPage === totalPages || totalPages === 0;
+    
+    // Números de página
+    pageNumbers.innerHTML = '';
+    for (let i = 1; i <= totalPages; i++) {
+        if (totalPages <= 7 || i === 1 || i === totalPages || (i >= currentPage - 2 && i <= currentPage + 2)) {
+            const pageBtn = document.createElement('span');
+            pageBtn.className = `page-number ${i === currentPage ? 'active' : ''}`;
+            pageBtn.textContent = i;
+            pageBtn.onclick = () => goToPage(i);
+            pageNumbers.appendChild(pageBtn);
+        } else if (i === currentPage - 3 || i === currentPage + 3) {
+            const dots = document.createElement('span');
+            dots.textContent = '...';
+            dots.className = 'page-number';
+            dots.style.cursor = 'default';
+            pageNumbers.appendChild(dots);
+        }
+    }
+}
+
+// Cambiar página
+function changePage(direction) {
+    const totalPages = Math.ceil(filteredProperties.length / propertiesPerPage);
+    const newPage = currentPage + direction;
+    
+    if (newPage >= 1 && newPage <= totalPages) {
+        currentPage = newPage;
+        renderProperties();
+    }
+}
+
+// Ir a página específica
+function goToPage(page) {
+    const totalPages = Math.ceil(filteredProperties.length / propertiesPerPage);
+    
+    if (page >= 1 && page <= totalPages) {
+        currentPage = page;
+        renderProperties();
+    }
 }

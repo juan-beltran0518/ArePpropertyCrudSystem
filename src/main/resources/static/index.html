@@ -7,6 +7,9 @@
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
+    <!-- Notification Container -->
+    <div id="notification" class="notification hidden"></div>
+    
     <!-- Header -->
     <header>
         <h1>Sistema de Propiedades</h1>
@@ -15,6 +18,30 @@
 
     <!-- Main Container -->
     <div class="container">
+        <!-- Search Filters -->
+        <div id="searchSection" class="search-section">
+            <h3>Buscar Propiedades</h3>
+            <div class="search-filters">
+                <div class="filter-group">
+                    <label for="searchAddress">Dirección:</label>
+                    <input type="text" id="searchAddress" placeholder="Buscar por dirección..." onkeyup="filterProperties()">
+                </div>
+                <div class="filter-group">
+                    <label for="minPrice">Precio mínimo:</label>
+                    <input type="number" id="minPrice" placeholder="0" onchange="filterProperties()">
+                </div>
+                <div class="filter-group">
+                    <label for="maxPrice">Precio máximo:</label>
+                    <input type="number" id="maxPrice" placeholder="Sin límite" onchange="filterProperties()">
+                </div>
+                <div class="filter-group">
+                    <label for="minSize">Área mínima (m²):</label>
+                    <input type="number" id="minSize" placeholder="0" onchange="filterProperties()">
+                </div>
+                <button type="button" onclick="clearFilters()">Limpiar Filtros</button>
+            </div>
+        </div>
+
         <!-- Property Form -->
         <div id="formSection" class="form-section hidden">
             <h2 id="formTitle">Agregar Nueva Propiedad</h2>
@@ -71,6 +98,18 @@
                     <!-- Las filas se cargarán dinámicamente -->
                 </tbody>
             </table>
+            
+            <!-- Pagination -->
+            <div id="paginationContainer" class="pagination-container hidden">
+                <div class="pagination-info">
+                    <span id="paginationInfo">Mostrando 0 de 0 propiedades</span>
+                </div>
+                <div class="pagination-controls">
+                    <button id="prevBtn" onclick="changePage(-1)" disabled>Anterior</button>
+                    <span id="pageNumbers"></span>
+                    <button id="nextBtn" onclick="changePage(1)" disabled>Siguiente</button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -85,9 +124,6 @@
             </div>
         </div>
     </div>
-
-    <!-- Simple Notifications -->
-    <div id="notification" class="notification hidden"></div>
 
     <script src="/js/properties.js"></script>
 </body>
