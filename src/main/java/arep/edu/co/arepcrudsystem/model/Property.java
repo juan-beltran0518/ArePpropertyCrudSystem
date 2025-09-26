@@ -4,29 +4,33 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import java.util.Objects;
 @Entity
-@Table(name = "properties")
+@Table(name = "properties", indexes = {
+    @Index(name = "idx_property_price", columnList = "price"),
+    @Index(name = "idx_property_size", columnList = "size")
+})
 public class Property {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
     
-    @Column(nullable = false, length = 500)
+    @Column(name = "address", nullable = false, length = 500)
     @NotBlank(message = "La dirección es obligatoria")
     @Size(min = 5, max = 500, message = "La dirección debe tener entre 5 y 500 caracteres")
     private String address;
     
-    @Column(nullable = false)
+    @Column(name = "price", nullable = false)
     @NotNull(message = "El precio es obligatorio")
     @DecimalMin(value = "0.01", message = "El precio debe ser mayor a cero")
     private Double price;
     
-    @Column(nullable = false)
+    @Column(name = "size", nullable = false)
     @NotNull(message = "El área es obligatoria")
     @DecimalMin(value = "1.0", message = "El área debe ser de al menos 1 m²")
     private Double size;
     
-    @Column(length = 1000)
+    @Column(name = "description", length = 1000, columnDefinition = "TEXT")
     @Size(max = 1000, message = "La descripción no puede exceder 1000 caracteres")
     private String description;
     
