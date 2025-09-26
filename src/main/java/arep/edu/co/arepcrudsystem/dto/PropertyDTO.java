@@ -3,10 +3,6 @@ package arep.edu.co.arepcrudsystem.dto;
 import jakarta.validation.constraints.*;
 import java.util.Objects;
 
-/**
- * Data Transfer Object for Property entity.
- * Used for API communication and data validation.
- */
 public class PropertyDTO {
     
     private Long id;
@@ -26,15 +22,12 @@ public class PropertyDTO {
     @Size(max = 1000, message = "La descripción no puede exceder 1000 caracteres")
     private String description;
     
-    // Campo del propietario (simplificado)
     @Size(max = 100, message = "El nombre del propietario no puede exceder 100 caracteres")
     private String ownerName;
     
-    // Constructor por defecto
     public PropertyDTO() {
     }
     
-    // Constructor con parámetros
     public PropertyDTO(String address, Double price, Double size, String description, String ownerName) {
         this.address = address;
         this.price = price;
@@ -92,7 +85,6 @@ public class PropertyDTO {
         this.ownerName = ownerName;
     }
     
-    // Método para calcular precio por m²
     public Double getPricePerSquareMeter() {
         if (size != null && size > 0 && price != null) {
             return price / size;
@@ -100,12 +92,10 @@ public class PropertyDTO {
         return 0.0;
     }
     
-    // Método para verificar si la propiedad es nueva
     public boolean isNew() {
         return id == null;
     }
     
-    // Método para obtener un resumen de la propiedad
     public String getSummary() {
         return String.format("Propiedad en %s - %,.0f m² - $%,.0f", 
                            address != null ? address : "Dirección no especificada",
@@ -113,7 +103,6 @@ public class PropertyDTO {
                            price != null ? price : 0.0);
     }
     
-    // Métodos equals, hashCode y toString
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -1,19 +1,15 @@
-// Estado global de la aplicación
 let properties = [];
 let filteredProperties = [];
 let editingId = null;
 
-// Variables para paginación
 let currentPage = 1;
 let propertiesPerPage = 5;
 
-// Inicialización cuando se carga la página
 document.addEventListener('DOMContentLoaded', function() {
     loadProperties();
     setupFormSubmission();
 });
 
-// Configurar el envío del formulario
 function setupFormSubmission() {
     const form = document.getElementById('propertyForm');
     form.addEventListener('submit', function(e) {
@@ -22,7 +18,6 @@ function setupFormSubmission() {
     });
 }
 
-// Mostrar el formulario
 function showForm() {
     document.getElementById('formSection').classList.remove('hidden');
     document.getElementById('formTitle').textContent = 'Agregar Nueva Propiedad';
@@ -31,7 +26,6 @@ function showForm() {
     clearForm();
 }
 
-// Ocultar el formulario
 function hideForm() {
     document.getElementById('formSection').classList.add('hidden');
     document.getElementById('showFormBtn').style.display = 'inline-block';
@@ -39,12 +33,10 @@ function hideForm() {
     clearForm();
 }
 
-// Limpiar el formulario
 function clearForm() {
     document.getElementById('propertyForm').reset();
 }
 
-// Cargar todas las propiedades
 async function loadProperties() {
     try {
         showLoading();
@@ -67,7 +59,6 @@ async function loadProperties() {
     }
 }
 
-// Renderizar la tabla de propiedades con paginación
 function renderProperties() {
     const tableBody = document.getElementById('propertiesTableBody');
     const table = document.getElementById('propertiesTable');
@@ -86,15 +77,12 @@ function renderProperties() {
     paginationContainer.classList.remove('hidden');
     emptyState.classList.add('hidden');
     
-    // Calcular propiedades para la página actual
     const startIndex = (currentPage - 1) * propertiesPerPage;
     const endIndex = startIndex + propertiesPerPage;
     const currentProperties = filteredProperties.slice(startIndex, endIndex);
     
-    // Limpiar tabla
     tableBody.innerHTML = '';
     
-    // Añadir filas de la página actual
     currentProperties.forEach(property => {
         const row = document.createElement('tr');
         row.innerHTML = `
@@ -114,16 +102,13 @@ function renderProperties() {
         tableBody.appendChild(row);
     });
     
-    // Actualizar paginación
     updatePagination();
 }
 
-// Formatear números con separadores de miles
 function formatNumber(number) {
     return new Intl.NumberFormat('es-CO').format(number);
 }
 
-// Guardar propiedad (crear o actualizar)
 async function saveProperty() {
     const formData = new FormData(document.getElementById('propertyForm'));
     
@@ -139,7 +124,6 @@ async function saveProperty() {
         let response;
         
         if (editingId) {
-            // Actualizar propiedad existente
             response = await fetch(`/api/properties/${editingId}`, {
                 method: 'PUT',
                 headers: {
@@ -148,7 +132,6 @@ async function saveProperty() {
                 body: JSON.stringify(propertyData)
             });
         } else {
-            // Crear nueva propiedad
             response = await fetch('/api/properties', {
                 method: 'POST',
                 headers: {
@@ -174,38 +157,32 @@ async function saveProperty() {
     }
 }
 
-// Editar propiedad
 function editProperty(id) {
     const property = properties.find(p => p.id === id);
     if (!property) return;
     
-    // Llenar el formulario con los datos de la propiedad
     document.getElementById('address').value = property.address;
     document.getElementById('price').value = property.price;
     document.getElementById('size').value = property.size;
     document.getElementById('description').value = property.description || '';
     document.getElementById('ownerName').value = property.ownerName || '';
     
-    // Configurar el formulario para edición
     editingId = id;
     document.getElementById('formTitle').textContent = 'Editar Propiedad';
     document.getElementById('formSection').classList.remove('hidden');
     document.getElementById('showFormBtn').style.display = 'none';
 }
 
-// Mostrar modal de confirmación de eliminación
 function showDeleteModal(id) {
     editingId = id;
     document.getElementById('deleteModal').classList.remove('hidden');
 }
 
-// Cerrar modal de eliminación
 function closeDeleteModal() {
     document.getElementById('deleteModal').classList.add('hidden');
     editingId = null;
 }
 
-// Confirmar eliminación
 async function confirmDelete() {
     if (!editingId) return;
     
@@ -227,34 +204,28 @@ async function confirmDelete() {
     }
 }
 
-// Mostrar estado de carga
 function showLoading() {
     document.getElementById('loading').classList.remove('hidden');
     document.getElementById('propertiesTable').classList.add('hidden');
     document.getElementById('emptyState').classList.add('hidden');
 }
 
-// Ocultar estado de carga
 function hideLoading() {
     document.getElementById('loading').classList.add('hidden');
 }
 
-// Mostrar notificación
 function showNotification(message, type = 'success') {
     const notification = document.getElementById('notification');
     notification.textContent = message;
     notification.className = `notification ${type}`;
     notification.classList.remove('hidden');
     
-    // Ocultar después de 3 segundos
     setTimeout(() => {
         notification.classList.add('hidden');
     }, 3000);
 }
 
-// ===== NUEVAS FUNCIONALIDADES =====
 
-// Filtrar propiedades
 function filterProperties() {
     const searchAddress = document.getElementById('searchAddress').value.toLowerCase();
     const minPrice = parseFloat(document.getElementById('minPrice').value) || 0;
@@ -269,11 +240,10 @@ function filterProperties() {
         return addressMatch && priceMatch && sizeMatch;
     });
     
-    currentPage = 1; // Resetear a primera página
+    currentPage = 1; 
     renderProperties();
 }
 
-// Limpiar filtros
 function clearFilters() {
     document.getElementById('searchAddress').value = '';
     document.getElementById('minPrice').value = '';
@@ -285,7 +255,6 @@ function clearFilters() {
     renderProperties();
 }
 
-// Actualizar controles de paginación
 function updatePagination() {
     const totalPages = Math.ceil(filteredProperties.length / propertiesPerPage);
     const paginationInfo = document.getElementById('paginationInfo');
@@ -293,16 +262,13 @@ function updatePagination() {
     const nextBtn = document.getElementById('nextBtn');
     const pageNumbers = document.getElementById('pageNumbers');
     
-    // Información de la paginación
     const startItem = (currentPage - 1) * propertiesPerPage + 1;
     const endItem = Math.min(currentPage * propertiesPerPage, filteredProperties.length);
     paginationInfo.textContent = `Mostrando ${startItem}-${endItem} de ${filteredProperties.length} propiedades`;
     
-    // Botones anterior/siguiente
     prevBtn.disabled = currentPage === 1;
     nextBtn.disabled = currentPage === totalPages || totalPages === 0;
     
-    // Números de página
     pageNumbers.innerHTML = '';
     for (let i = 1; i <= totalPages; i++) {
         if (totalPages <= 7 || i === 1 || i === totalPages || (i >= currentPage - 2 && i <= currentPage + 2)) {
@@ -321,7 +287,6 @@ function updatePagination() {
     }
 }
 
-// Cambiar página
 function changePage(direction) {
     const totalPages = Math.ceil(filteredProperties.length / propertiesPerPage);
     const newPage = currentPage + direction;
@@ -332,7 +297,6 @@ function changePage(direction) {
     }
 }
 
-// Ir a página específica
 function goToPage(page) {
     const totalPages = Math.ceil(filteredProperties.length / propertiesPerPage);
     

@@ -9,10 +9,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/**
- * REST Controller for Property operations.
- * Handles HTTP requests for CRUD operations on properties.
- */
 @RestController
 @RequestMapping("/api/properties")
 @CrossOrigin(origins = "*")

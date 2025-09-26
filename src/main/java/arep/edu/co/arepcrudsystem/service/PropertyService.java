@@ -10,10 +10,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-/**
- * Service class for Property operations.
- * Handles business logic and data transformations between Entity and DTO.
- */
 @Service
 @Transactional
 public class PropertyService {

@@ -3,11 +3,6 @@ package arep.edu.co.arepcrudsystem.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import java.util.Objects;
-
-/**
- * Entity class representing a real estate property.
- * Contains information about address, price, size, and description.
- */
 @Entity
 @Table(name = "properties")
 public class Property {
@@ -35,16 +30,13 @@ public class Property {
     @Size(max = 1000, message = "La descripción no puede exceder 1000 caracteres")
     private String description;
     
-    // Campo del propietario (simplificado)
     @Column(name = "owner_name", length = 100)
     @Size(max = 100, message = "El nombre del propietario no puede exceder 100 caracteres")
     private String ownerName;
     
-    // Constructor por defecto
     public Property() {
     }
     
-    // Constructor con parámetros
     public Property(String address, Double price, Double size, String description, String ownerName) {
         this.address = address;
         this.price = price;
@@ -53,7 +45,6 @@ public class Property {
         this.ownerName = ownerName;
     }
     
-    // Getters y Setters
     public Long getId() {
         return id;
     }
@@ -102,7 +93,6 @@ public class Property {
         this.ownerName = ownerName;
     }
     
-    // Método para calcular precio por m²
     public Double getPricePerSquareMeter() {
         if (size != null && size > 0 && price != null) {
             return price / size;
@@ -110,7 +100,6 @@ public class Property {
         return 0.0;
     }
     
-    // Métodos equals, hashCode y toString
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
