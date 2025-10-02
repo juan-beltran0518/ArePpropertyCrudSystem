@@ -2,6 +2,11 @@
 
 Sistema CRUD completo para la gestión de propiedades inmobiliarias desarrollado con Spring Boot, MySQL y Frontend JavaScript vanilla.
 
+# repositorio independiente que contiene el código de las clases de evidencia y tutoriales de JPA del taller de AWS-CLI
+```
+https://github.com/juan-beltran0518/AWS-CLIWorkshops.git
+```
+
 ## Descripción del Proyecto
 
 Este proyecto implementa un sistema completo de gestión de propiedades inmobiliarias que permite realizar operaciones CRUD (Create, Read, Update, Delete) sobre propiedades. Fue desarrollado como parte del curso AREP (Arquitecturas Empresariales) con un enfoque en arquitecturas distribuidas y despliegue en la nube.
