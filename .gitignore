@@ -4,6 +4,12 @@
 # Log file
 *.log
 
+# Large video files (use external links instead)
+*.mov
+*.mp4
+*.avi
+docs/images/Videos/PruebaFuncionalSebastianB.mov
+
 # BlueJ files
 *.ctxt
 
