@@ -2,7 +2,7 @@
 
 Sistema CRUD completo para la gestión de propiedades inmobiliarias desarrollado con Spring Boot, MySQL y Frontend JavaScript vanilla.
 
-# repositorio independiente que contiene el código de las clases de evidencia y tutoriales de JPA del taller de AWS-CLI
+## Repositorio independiente que contiene el código de las clases de evidencia y tutoriales de JPA del taller de AWS-CLI
 ```
 https://github.com/juan-beltran0518/AWS-CLIWorkshops.git
 ```
