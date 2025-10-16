@@ -11,6 +11,18 @@ https://github.com/juan-beltran0518/AWS-CLIWorkshops.git
 
 Este proyecto implementa un sistema completo de gestión de propiedades inmobiliarias que permite realizar operaciones CRUD (Create, Read, Update, Delete) sobre propiedades. Fue desarrollado como parte del curso AREP (Arquitecturas Empresariales) con un enfoque en arquitecturas distribuidas y despliegue en la nube.
 
+## Video de Demostración
+
+### Demostración de Funcionalidades
+
+
+[![Video Demo](docs/images/Videos/qww.png)]([ruta-del-video])
+
+### Copiar URL Para Ver Demostración de Funcionalidades (Se recomienda poner en X1.5 o X2)
+```
+https://pruebacorreoescuelaingeduco-my.sharepoint.com/:v:/g/personal/juan_brodriguez_mail_escuelaing_edu_co/ERYLxH1QTjhKoOpsEmljLSwBrNVgkIywUvwG6tLMwf1mPg?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=FCVlMh
+```
+
 ### Funcionalidades Principales
 
 - **Gestión completa de propiedades** (Crear, Leer, Actualizar, Eliminar)
@@ -252,19 +264,6 @@ java -jar arepcrudsystem-0.0.1-SNAPSHOT.jar --spring.profiles.active=aws
 
 ### Arquitectura AWS
 ![Arquitectura AWS](docs/images/Videos/ArquitecturaAWS.png)
-
-## Video de Demostración
-
-### Demostración de Funcionalidades
-
-
-[![Video Demo](docs/images/Videos/qww.png)]([ruta-del-video])
-
-### Copiar URL Para Ver Demostración de Funcionalidades (Se recomienda poner en X1.5 o X2)
-```
-https://pruebacorreoescuelaingeduco-my.sharepoint.com/:v:/g/personal/juan_brodriguez_mail_escuelaing_edu_co/ERYLxH1QTjhKoOpsEmljLSwBrNVgkIywUvwG6tLMwf1mPg?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=FCVlMh
-```
-
 
 ## Características Técnicas
 
